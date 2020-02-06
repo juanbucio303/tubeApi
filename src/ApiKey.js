@@ -1,4 +1,4 @@
-const KEY='AIzaSyDIvepZjp1mGEtzWmIQ0pP0NRJmUiKqoV4';
+const KEY='API_KEY';//aqui va el api key
 
 
 export default KEY
