@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Modal } from 'react-bootstrap';
 
-const ModalP = ({show,hide,res})=> (
+const ModalP = ({show,hide,res,text})=> (
   
 
       <>  
@@ -10,7 +10,11 @@ const ModalP = ({show,hide,res})=> (
             aria-labelledby="example-custom-modal-styling-title"
         >
           <Modal.Body>
-            
+            <h3 className="text-center">
+              <strong>
+                {text}
+              </strong>
+            </h3>
           </Modal.Body>
           <Modal.Footer>
               <Button onClick={hide}>Cerrar</Button>

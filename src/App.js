@@ -27,6 +27,7 @@ const App = () => {
       console.log(tmp);
       
       localStorage.setItem('accessToken', tmp.access_token);
+      window.location.hash='login'
     }
   })
   return (
@@ -48,9 +49,7 @@ const App = () => {
           <Nav.Link href="/tipos">Tipos</Nav.Link>
         </Nav>
         <Nav>
-          <Nav.Link target='_self' href='https://accounts.google.com/o/oauth2/v2/auth?scope=https:%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube&redirect_uri=http:%2F%2Flocalhost:3000/index&response_type=token&client_id=472290734301-7d2bkdn5n2vog4i2clho72v42la5a42l.apps.googleusercontent.com'>Iniciar Sesion</Nav.Link>
-          <Nav.Link onClick={clic} >comp</Nav.Link>
-          
+          <Nav.Link target='_self' href='https://accounts.google.com/o/oauth2/v2/auth?scope=https:%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube&redirect_uri=http:%2F%2Flocalhost:3000/index&response_type=token&client_id=472290734301-7d2bkdn5n2vog4i2clho72v42la5a42l.apps.googleusercontent.com'>Iniciar Sesion</Nav.Link>          
         </Nav>
       </Navbar>
       <div className="container-fluid"> 

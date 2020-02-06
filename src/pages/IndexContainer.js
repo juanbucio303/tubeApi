@@ -18,6 +18,7 @@ const IndexContainer = () => {
     
     const [busqueda,setBusqueda] = useState([]);
     const [tokenPage,setTokenPage] = useState('');
+    const [textModal,setTextModal] = useState('');
     const [idVideo,setIdVideo] = useState('zAOOR-2RYMY')
     //const [data,setData] = useState([]);
     const datos = GetVideos(busqueda,tokenPage) 
@@ -134,6 +135,7 @@ const IndexContainer = () => {
     }
     const setRate = (e) =>{
         console.log(e.target.id);
+        let cali=e.target.id;
         var settings = {
             "async": true,
             "crossDomain": true,
@@ -156,7 +158,14 @@ const IndexContainer = () => {
               Axios(settings)
               .then(res=>{
                   console.log(res);
-              }).catch(error=> console.log(error)
+                  setTextModal('Diste '+cali)
+                  setShow(true)
+
+              }).catch(error=> {
+                  console.log(error)
+                  setTextModal('Iniciar sesion de nuevo')
+                  setShow(true)
+                }
               )
               
         
@@ -186,7 +195,8 @@ const IndexContainer = () => {
             <Modal
                show={show}
                hide={CloseModal}
-                res={html}
+               res={html}
+               text={textModal}
             />
             <div className="col-4 fixed-top" style={{left:'62%',margin:'4rem'}}>
                     {/*<Video video={video}endVideo={endVideo}/>*/}
