@@ -10,7 +10,8 @@ import { Card,Accordion,Button } from 'react-bootstrap';
 import Youtube from 'react-youtube'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp, faThumbsDown, faSearch, faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons'
-
+import SetRating from "../hooks/SetRating";
+import Modal from "../components/Modal";
 //import {faSearch} from '@fortawesome/free-solid-svg-icons'
 
 const IndexContainer = () => {
@@ -21,7 +22,11 @@ const IndexContainer = () => {
     //const [data,setData] = useState([]);
     const datos = GetVideos(busqueda,tokenPage) 
     const {dataRate} = GetRate(idVideo); 
-    
+    const [show, setShow] = useState(false);
+    const [html,setHtml]= useState([]);
+    const CloseModal = () =>{
+        setShow(false)
+    }
     let cad='';
     let [list,setLis]=useState([])
     const [listItems,setListItems]=useState([])
@@ -30,7 +35,7 @@ const IndexContainer = () => {
         height: '315',
         width: '420',
         playerVars: { // https://developers.google.com/youtube/player_parameters
-          autoplay: 1
+          autoplay: 0
         }
       };
     const SearchTxt = (e) =>{
@@ -40,8 +45,9 @@ const IndexContainer = () => {
         setBusqueda(cad);        
     }
     const clic = () =>{
-        console.log(dataRate);
-        //console.log(listItems);    
+            
+            //console.log(accessToken);
+               
     }
     const clickControlPages = (e) =>{
         setTokenPage(e.target.id)
@@ -61,15 +67,7 @@ const IndexContainer = () => {
                 let arr=list.concat(json)
                 arr.pop()
                 setListItems(arr)
-
         }
-        //console.log(e.target.id)
-        //let arr=list;
-        //listItems.splice(e.target.id,1)
-        //list.splice(e.target.id,1);
-        //console.log(listItems);
-        //let arr=listItems;
-        //setListItems(list);
         
     }
     const click = (e) =>{
@@ -134,10 +132,38 @@ const IndexContainer = () => {
             setBusqueda(cad);
         }
     }
+    const setRate = (e) =>{
+        console.log(e.target.id);
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://www.googleapis.com/youtube/v3/videos/rate",
+            "method": "POST",
+            'params':{
+                "id":idVideo,
+                "key":KEY,
+                "rating":e.target.id
+            },
+            "headers": {
+              "authorization": "Bearer "+localStorage.getItem('accessToken') ,
+              "accept": "application/json",
+              "cache-control": "no-cache",
+              "postman-token": "ecf0de08-9688-80d8-76be-fa5c57c50815"
+            }
+          }
+          
+          
+              Axios(settings)
+              .then(res=>{
+                  console.log(res);
+              }).catch(error=> console.log(error)
+              )
+              
+        
+    }
     return(
         <div className="row">
-            <div className="col-8">
-                <button onClick={clic} >ok</button>
+            <div className="col-8 m-3">
                 <div className="row">
                         <div className="input-group mb-2 mr-sm-2">
                             <input type="text" onKeyPress={pressEnter} className="form-control" onChange={SearchTxt} placeholder="Buscar"/>
@@ -157,7 +183,12 @@ const IndexContainer = () => {
                     <button type="button" onClick={clickControlPages} id={datos.data.next} className="btn btn-info"> <FontAwesomeIcon icon={faCaretRight}/></button>
                 </div>
             </div>
-            <div className="col-4 fixed-top" style={{left:'66%'}}>
+            <Modal
+               show={show}
+               hide={CloseModal}
+                res={html}
+            />
+            <div className="col-4 fixed-top" style={{left:'62%',margin:'4rem'}}>
                     {/*<Video video={video}endVideo={endVideo}/>*/}
                     <Youtube
                         videoId={video}
@@ -168,8 +199,8 @@ const IndexContainer = () => {
                     <div className="btn-group" role="group" aria-label="Basic example">
                         <button type="button" onClick={endVideo} className="btn btn-success">Play</button>
                         <button type="button" onClick={console.log('list')} className="btn btn-dark">Lista</button>
-                        <button type="button" className="btn btn-info btn-sm"><FontAwesomeIcon icon={faThumbsUp} /><span className="badge badge-pill badge-info">{dataRate.likeCount}</span></button>
-                        <button type="button" className="btn btn-danger btn-sm"><FontAwesomeIcon icon={faThumbsDown} /><span className="badge badge-pill badge-danger">{dataRate.dislikeCount}</span></button>
+                        <button type="button" onClick={setRate} id="like" className="btn btn-info btn-sm"><FontAwesomeIcon icon={faThumbsUp} /><span className="badge badge-pill badge-info">{dataRate.likeCount}</span></button>
+                        <button type="button" onClick={setRate} id="dislike" className="btn btn-danger btn-sm"><FontAwesomeIcon icon={faThumbsDown} /><span className="badge badge-pill badge-danger">{dataRate.dislikeCount}</span></button>
                     </div>
                     
                     <div className='col-12'onDrop={drop} onDragOver={allowDrop}>
